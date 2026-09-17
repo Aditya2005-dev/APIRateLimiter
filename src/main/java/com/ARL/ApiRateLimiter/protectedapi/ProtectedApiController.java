@@ -7,6 +7,7 @@ import com.ARL.ApiRateLimiter.ratelimiter.RateLimitResult;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 public class ProtectedApiController {
+
+    @Value("${app.base-url}")
+    private String appBaseUrl;
 
     private final ProtectedApiService protectedApiService;
     private final FixedWindowRateLimiter rateLimiter;
@@ -46,7 +50,7 @@ public class ProtectedApiController {
                         request.getWindowSeconds()
                 );
 
-        return "http://localhost:8080/api/v1/proxy/"
+        return appBaseUrl + "/api/v1/proxy/"
                 + protectedApi.getId();
     }
 
